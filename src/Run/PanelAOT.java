@@ -1,6 +1,6 @@
 package Run;
 
-import Object.Bullet;
+
 import Object.GameWorld;
 import Object.PhysicalMap;
 import java.awt.Color;
@@ -17,27 +17,25 @@ public class PanelAOT extends JPanel implements Runnable, KeyListener, MouseList
     public static boolean isRunning;
     public static Thread thread;
     public static float num;
-    InputManager inputManager;
-    PhysicalMap physicalMap;
     GameWorld gameWorld;
-    Bullet bullet;
+    InputManager inputManager;
     private float count = 2;
-    private float a, b;
 
     public PanelAOT() {
         gameWorld = new GameWorld();
         inputManager = new InputManager(gameWorld);
-        bullet = new Bullet(15);
-
+       
     }
 
+    @Override
     public void paint(Graphics g) {
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, 1200, 800);
         gameWorld.draw(g);
-        if (inputManager.mouse == true) {
-            bullet.draw(g);
-        }
+        
+        g.setColor(Color.RED);
+        g.drawLine((int) gameWorld.camera.getPosX(), (int) gameWorld.soldier.getPosY(),
+                (int) gameWorld.soldier.getPosX(), (int) gameWorld.soldier.getPosY());
     }
 
     @Override
@@ -53,17 +51,13 @@ public class PanelAOT extends JPanel implements Runnable, KeyListener, MouseList
 
             Update();
             repaint();
-            System.out.println(bullet.getSpeedX());
-            System.out.println(bullet.getSpeedY());
-            bullet.setSpeedX(0.1f);
-            bullet.setSpeedY(0.1f * a + b);
 
-            if (inputManager.left == true && inputManager.up == true && gameWorld.soldier.checkJump == true) {
+            if (inputManager.left == true && inputManager.up == true && gameWorld.soldier.getIsJumping() == true) {
                 gameWorld.soldier.setSpeedX(-3);
                 gameWorld.soldier.setSpeedY(-4);
             }
 
-            if (inputManager.right == true && inputManager.up == true && gameWorld.soldier.checkJump == true) {
+            if (inputManager.right == true && inputManager.up == true && gameWorld.soldier.getIsJumping() == true) {
                 gameWorld.soldier.setSpeedX(3);
                 gameWorld.soldier.setSpeedY(-4);
             }
@@ -86,7 +80,7 @@ public class PanelAOT extends JPanel implements Runnable, KeyListener, MouseList
 
     public void Update() {
         gameWorld.Update();
-        bullet.Update();
+       
     }
 
     public void startGame() {
@@ -114,22 +108,24 @@ public class PanelAOT extends JPanel implements Runnable, KeyListener, MouseList
 
     @Override
     public void mouseClicked(MouseEvent me) {
+
 //        inputManager.mouseClicked();
+//          ArrayList 
+//        bullet.setPosX((int) gameWorld.soldier.getPosX() + (int) gameWorld.soldier.getWidth() / 2 - (int) bullet.getRadius());
+//        bullet.setPosY((int) gameWorld.soldier.getPosY());
+//        a = (gameWorld.soldier.getPosY() - me.getY()) / (gameWorld.soldier.getPosX() + gameWorld.soldier.getWidth() / 2 - me.getX() - 15);
+//        b = me.getY() - me.getX() * a;
+//        bullet.setSpeedX(2);
+//        bullet.setSpeedY(-2);
+        inputManager.mousePressed();
+
     }
 
     @Override
     public void mousePressed(MouseEvent me) {
-//        int me1 = me.getX();
-        bullet.setPosX((int) gameWorld.soldier.getPosX() + (int) gameWorld.soldier.getWidth() / 2 - (int) bullet.getRadius());
-        bullet.setPosY((int) gameWorld.soldier.getPosY());
-        a = (gameWorld.soldier.getPosY() - me.getY()) / (gameWorld.soldier.getPosX() + gameWorld.soldier.getWidth() / 2 - me.getX() - 15);
-        b = me.getY() - me.getX() * a;
-        System.out.println("mX = " + me.getX());
-        System.out.println("mY = " + me.getY()); 
-        inputManager.mousePressed();
 
     }
- 
+
     @Override
     public void mouseReleased(MouseEvent me) {
 

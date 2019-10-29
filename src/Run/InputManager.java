@@ -23,18 +23,15 @@ public class InputManager {
         switch (keyCode) {
             case KeyEvent.VK_UP:
                 up = true;
-                System.out.println("prUP");
                 break;
             case KeyEvent.VK_DOWN:
 
                 break;
             case KeyEvent.VK_LEFT:
-                System.out.println("prLEFT");
                 left = true;
                 gameWorld.soldier.setSpeedX(-3);
                 break;
             case KeyEvent.VK_RIGHT:
-                System.out.println("prRIGHT");
                 right = true;
                 gameWorld.soldier.setSpeedX(3);
                 break;
@@ -47,7 +44,7 @@ public class InputManager {
         switch (keyCode) {
             case KeyEvent.VK_UP:
                 up = false;
-                if (gameWorld.soldier.checkJump == true) {
+                if (gameWorld.soldier.getIsJumping() == true) {
                     gameWorld.soldier.setSpeedY(-4);
                 }
                 break;
@@ -63,7 +60,7 @@ public class InputManager {
                 gameWorld.soldier.setSpeedX(0);
                 break;
             case KeyEvent.VK_SPACE://higher jump
-                if (gameWorld.soldier.checkJump == true) {
+                if (gameWorld.soldier.getIsJumping() == true) {
                     gameWorld.soldier.setSpeedY(-10);
                 }
                 break;

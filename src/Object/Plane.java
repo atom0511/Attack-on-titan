@@ -3,32 +3,24 @@ package Object;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import java.util.Random;
 
-public class Plane {
 
-    private float posX;
-    private float posY;
-
-    private float height;
-    private float width;
-
-    private float speedX;
-    private float speedY;
+public class Plane extends ParticularObject {
 
     private boolean direction = true;
 
-    public Plane(float posX, float posY, float width, float height, float speedX, float speedY) {
-        Random rd = new Random();
-        this.posX = rd.nextInt((int) posX) + getWidth();
-        this.posY = rd.nextInt((int) posY) + getHeight();
-        this.height = height;
-        this.width = width;
-        this.speedX = speedX;
-        this.speedY = speedY;
+    public Plane(float posX, float posY, float width, float height, float speedX, float speedY,
+            float mass, int blood, GameWorld gameWorld) {
+        
+        super(posX, posY, width, height, mass, blood, gameWorld);
+        setSpeedX(speedX);
+        setSpeedY(speedY);
+        
     }
 
+    @Override
     public void Update() {
+        super.Update();
         if (getPosX() > 0 && direction == true) {
             setPosX(getPosX() - getSpeedX());
         }
@@ -41,69 +33,35 @@ public class Plane {
         if (getPosX() >= 1100) {
             direction = true;
         }
-
     }
 
+    @Override
     public void draw(Graphics g) {
         g.setColor(Color.GREEN);
-        g.fillRect((int) posX, (int) posY, (int) width, (int) height);
+        g.fillRect((int) getPosX(), (int) getPosY(), (int) getWidth(), (int) getHeight());
     }
 
     public Rectangle rectangle() {
         Rectangle rec = new Rectangle();
-        rec.x = (int) (posX - getWidth());
-        rec.y = (int) (posY - getHeight());
-        rec.height = (int) height;
-        rec.width = (int) width;
+        rec.x = (int) (getPosX() - getWidth());
+        rec.y = (int) (getPosY() - getHeight());
+        rec.height = (int) getHeight();
+        rec.width = (int) getWidth();
         return rec;
     }
 
-    public float getPosX() {
-        return posX;
+    public boolean isDirection() {
+        return direction;
     }
 
-    public void setPosX(float posX) {
-        this.posX = posX;
+    public void setDirection(boolean direction) {
+        this.direction = direction;
     }
 
-    public float getPosY() {
-        return posY;
+    @Override
+    public Rectangle getBoundForCollisionWithEnemy() {
+       Rectangle rect = getBoundForCollisionWithMap();
+       return rect;
     }
-
-    public void setPosY(float posY) {
-        this.posY = posY;
-    }
-
-    public float getHeight() {
-        return height;
-    }
-
-    public void setHeight(float height) {
-        this.height = height;
-    }
-
-    public float getWidth() {
-        return width;
-    }
-
-    public void setWidth(float width) {
-        this.width = width;
-    }
-
-    public float getSpeedX() {
-        return speedX;
-    }
-
-    public void setSpeedX(float speedX) {
-        this.speedX = speedX;
-    }
-
-    public float getSpeedY() {
-        return speedY;
-    }
-
-    public void setSpeedY(float speedY) {
-        this.speedY = speedY;
-    }
-
+    
 }

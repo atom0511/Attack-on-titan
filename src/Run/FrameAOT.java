@@ -7,6 +7,8 @@ import javax.swing.JFrame;
 public class FrameAOT extends JFrame {
 
     public static PanelAOT panelAOT;
+    public static final int SCREEN_WIDTH = 1200;
+    public static final int SCREEN_HEIGHT = 800;
 
     public FrameAOT() {
         panelAOT = new PanelAOT();
@@ -23,7 +25,7 @@ public class FrameAOT extends JFrame {
 
     public void creatAndShow() {
         setTitle("Attack on T");
-        setSize(1200, 800);
+        setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
         setDefaultCloseOperation(3);
         setLocationRelativeTo(this);
         setVisible(true);

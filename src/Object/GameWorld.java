@@ -1,5 +1,6 @@
 package Object;
 
+import Run.FrameAOT;
 import java.awt.Graphics;
 
 public class GameWorld {
@@ -7,30 +8,28 @@ public class GameWorld {
     Plane plane;
     public Soldier soldier;
     PhysicalMap physicalMap;
-   
-    
+    public Camera camera;
 
     public GameWorld() {
-        
-        physicalMap = new PhysicalMap(0, 0);
-        soldier = new Soldier(300, 300, 50, 50, 0.1f);
-        plane = new Plane(1100, 165, 100, 50, 2, 2);
-        
-        
-    }
-
-    public void Update() {
-        soldier.Update();
-        plane.Update();
-        
+        camera = new Camera(0, 0, FrameAOT.SCREEN_WIDTH, FrameAOT.SCREEN_HEIGHT, this);
+        soldier = new Soldier(400, 200, 50, 50, 0.1f, 20, this);
+        plane = new Plane(1100, 165, 100, 50, 2, 2, 0, 10, this);
+        physicalMap = new PhysicalMap(0, 0, this);
+       
     }
 
     public void draw(Graphics g) {
-        physicalMap.draw(g);
         soldier.draw(g);
         plane.draw(g);
-   
-        
+        camera.draw(g);
+        physicalMap.draw(g);
     }
+    
+       public void Update() {
+        soldier.Update();
+        plane.Update();
+        camera.Update();
+    }
+
 
 }

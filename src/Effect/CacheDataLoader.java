@@ -3,19 +3,16 @@ package Effect;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Hashtable;
 
 public class CacheDataLoader {
 
-    private static CacheDataLoader instance;
+    private static CacheDataLoader instance = null;
 
-    private String physicMapFile = "data/phys_map.txt";
+    private String physmapfile = "data/phys_map.txt";
+    
+    private int[][] phys_map;
 
-    public static int[][] physMap;
-
-    public CacheDataLoader() {
-
-    }
+    private CacheDataLoader() {}
 
     public static CacheDataLoader getInstance() {
         if (instance == null) {
@@ -25,16 +22,19 @@ public class CacheDataLoader {
     }
 
     public int[][] getPhysicalMap() {
-        return instance.physMap;
+        return instance.phys_map;
     }
 
     public void LoadData() throws IOException {
-        loadPhysicalMap();
+
+        LoadPhysMap();
+
     }
 
-    public void loadPhysicalMap() throws IOException {
-        FileReader fr = new FileReader(physicMapFile); // tra ve 1 luong du lieu
-        BufferedReader br = new BufferedReader(fr); // theo luong du lieu de doc
+    public void LoadPhysMap() throws IOException {
+
+        FileReader fr = new FileReader(physmapfile);
+        BufferedReader br = new BufferedReader(fr);
 
         String line = null;
 
@@ -43,25 +43,28 @@ public class CacheDataLoader {
         line = br.readLine();
         int numberOfColumns = Integer.parseInt(line);
 
-        instance.physMap = new int[numberOfRows][numberOfColumns];
-        System.out.println(physMap.length);
+        instance.phys_map = new int[numberOfRows][numberOfColumns];
+
         for (int i = 0; i < numberOfRows; i++) {
             line = br.readLine();
             String[] str = line.split(" ");
             for (int j = 0; j < numberOfColumns; j++) {
-                instance.physMap[i][j] = Integer.parseInt(str[j]);
+                instance.phys_map[i][j] = Integer.parseInt(str[j]);
             }
         }
-//        in map ra console
-//        for (int i = 0; i < numberOfRows; i++) {
-//
-//            for (int j = 0; j < numberOfColumns; j++) {
-//                System.out.print(" " + instance.physMap[i][j]);
-//            }
-//
-//            System.out.println();
-//        }
+        System.out.println(phys_map.length);
+        System.out.println(phys_map[0].length);
+        for (int i = 0; i < numberOfRows; i++) {
+
+            for (int j = 0; j < numberOfColumns; j++) {
+                System.out.print(" " + instance.phys_map[i][j]);
+            }
+
+            System.out.println();
+        }
+
         br.close();
+
     }
 
 }

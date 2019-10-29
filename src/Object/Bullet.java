@@ -2,38 +2,27 @@ package Object;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.Rectangle;
 
-public class Bullet implements MouseListener, MouseMotionListener {
+public class Bullet extends ParticularObject{
 
-    private int posX;
-    private int posY;
     public float speedX;
     public float speedY;
     private int radius;
     public boolean isShooting = false;
 
-    public Bullet(int radius) {
+    public Bullet(float posX, float posY, float width, float height, float mass, int damage, int radius, GameWorld gameWorld) {
+        super(posX, posY, width, height, mass, damage, gameWorld);
+        setDamage(damage);
         this.radius = radius;
-
+    }
+    
+    public int getRadius() {
+        return radius;
     }
 
-    public float getSpeedX() {
-        return speedX;
-    }
-
-    public void setSpeedX(float speedX) {
-        this.speedX = speedX;
-    }
-
-    public float getSpeedY() {
-        return speedY;
-    }
-
-    public void setSpeedY(float speedY) {
-        this.speedY = speedY;
+    public void setRadius(int radius) {
+        this.radius = radius;
     }
 
     public boolean isIsShooting() {
@@ -43,70 +32,21 @@ public class Bullet implements MouseListener, MouseMotionListener {
     public void setIsShooting(boolean isShooting) {
         this.isShooting = isShooting;
     }
-
-    public void Update() {
-        setPosX(getPosX() + (int) getSpeedX());
-        setPosY(getPosY() + (int) getSpeedY());
+    
+    @Override
+    public void Update(){
+        
     }
-
-    public void draw(Graphics g) {
-        g.setColor(Color.RED);
-        g.fillOval(posX - radius / 2 - 10, posY - radius / 2 - 40, radius, radius);
-    }
-
-    public int getPosX() {
-        return posX;
-    }
-
-    public void setPosX(int posX) {
-        this.posX = posX;
-    }
-
-    public int getPosY() {
-        return posY;
-    }
-
-    public void setPosY(int posY) {
-        this.posY = posY;
-    }
-
-    public int getRadius() {
-        return radius;
-    }
-
-    public void setRadius(int radius) {
-        this.radius = radius;
+    
+    public void draw(Graphics g){
+        g.setColor(Color.yellow);
+        g.fillRect((int)getPosX(),(int) getPosY(), radius, radius);
     }
 
     @Override
-    public void mouseClicked(MouseEvent me) {
-
-    }
-
-    @Override
-    public void mousePressed(MouseEvent me) {
-
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent me) {
-
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent me) {
-    }
-
-    @Override
-    public void mouseExited(MouseEvent me) {
-    }
-
-    @Override
-    public void mouseDragged(MouseEvent me) {
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent me) {
+    public Rectangle getBoundForCollisionWithEnemy() {
+        Rectangle rect = getBoundForCollisionWithMap();
+        return rect;
     }
 
 }
