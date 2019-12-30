@@ -32,29 +32,29 @@ public class Camera extends GameObject {
     }
 
     public void draw(Graphics g) {
-        g.setColor(Color.red);
-        g.drawRect((int) getPosX(), (int) getPosY(), (int) getWidthView(), (int) getHeightView());
+//        g.setColor(Color.red);
+//        g.drawRect((int) getPosX(), (int) getPosY(), (int) getWidthView(), (int) getHeightView());
     }
 
     public void Update() {
 
-        if (!isLocked) {
-
-            if (getGameWorld().soldier.getPosX() - getPosX() > 500) {
-                setPosX(getGameWorld().soldier.getPosX() - 500);
-                System.out.println("cameraX = " + getPosX());
-                System.out.println("soldierX = " + getGameWorld().soldier.getPosX()); 
-            }
-            if (getGameWorld().soldier.getPosX() - getPosX() < 200) {
-                setPosX(getGameWorld().soldier.getPosX() - 200);
-            }
-
-            if (getGameWorld().soldier.getPosY() - getPosY() > 625) {
-                setPosY(getGameWorld().soldier.getPosY() - 625); // bottom
-            } else if (getGameWorld().soldier.getPosY() - getPosY() < 200) {
-                setPosY(getGameWorld().soldier.getPosY() - 200);// top 
-            }
-        }
+//        if (!isLocked) {
+//
+//            if (getGameWorld().soldier.getPosX() - getPosX() > 500) {
+//                setPosX(getGameWorld().soldier.getPosX() - 500);
+//                System.out.println("cameraX = " + getPosX());
+//                System.out.println("soldierX = " + getGameWorld().soldier.getPosX()); 
+//            }
+//            if (getGameWorld().soldier.getPosX() - getPosX() < 200) {
+//                setPosX(getGameWorld().soldier.getPosX() - 200);
+//            }
+//
+//            if (getGameWorld().soldier.getPosY() - getPosY() > 625) {
+//                setPosY(getGameWorld().soldier.getPosY() - 625); // bottom
+//            } else if (getGameWorld().soldier.getPosY() - getPosY() < 200) {
+//                setPosY(getGameWorld().soldier.getPosY() - 200);// top 
+//            }
+//        }
     }
 
     public float getWidthView() {

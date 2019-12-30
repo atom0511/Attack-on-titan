@@ -1,47 +1,34 @@
 package Object;
 
-import java.awt.Color;
+
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
-public class Bullet extends ParticularObject{
+public abstract class Bullet extends ParticularObject {
 
-    public float speedX;
-    public float speedY;
-    private int radius;
-    public boolean isShooting = false;
+    private int speedX = 0;
+    private int speedY = -5;
 
-    public Bullet(float posX, float posY, float width, float height, float mass, int damage, int radius, GameWorld gameWorld) {
-        super(posX, posY, width, height, mass, damage, gameWorld);
+    public Bullet(float posX, float posY, float width, float height, float mass, int damage, GameWorld gameWorld) {
+        super(posX, posY, width, height, mass, 1, gameWorld);
         setDamage(damage);
-        this.radius = radius;
-    }
-    
-    public int getRadius() {
-        return radius;
-    }
-
-    public void setRadius(int radius) {
-        this.radius = radius;
-    }
-
-    public boolean isIsShooting() {
-        return isShooting;
-    }
-
-    public void setIsShooting(boolean isShooting) {
-        this.isShooting = isShooting;
     }
     
     @Override
-    public void Update(){
+    public void Update() {
+        super.Update();
+        setPosX(getPosX() + getSpeedX());
+        setPosY(getPosY() + getSpeedY());
         
+        ParticularObject object = getGameWorld().particularObjectManager.getCollisionWithEnemyObject(this);
+        if (object != null && object.getState() == ALIVE) {
+            setBlood(0);
+            object.beHurt(getDamage()); 
+            System.out.println("Bullet set behurt for enemy");
+        }
     }
-    
-    public void draw(Graphics g){
-        g.setColor(Color.yellow);
-        g.fillRect((int)getPosX(),(int) getPosY(), radius, radius);
-    }
+
+    public abstract void draw(Graphics g);
 
     @Override
     public Rectangle getBoundForCollisionWithEnemy() {

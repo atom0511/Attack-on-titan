@@ -1,0 +1,5 @@
+3
+
+backGround data/Sound/bg.wav
+shootSoldier data/Sound/shootSoldier.wav
+shootPlane data/Sound/shootPlane.wav

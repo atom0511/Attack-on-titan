@@ -7,20 +7,21 @@ import javax.swing.JFrame;
 public class FrameAOT extends JFrame {
 
     public static PanelAOT panelAOT;
-    public static final int SCREEN_WIDTH = 1200;
-    public static final int SCREEN_HEIGHT = 800;
+    public static final int SCREEN_WIDTH = 1770;
+    public static final int SCREEN_HEIGHT = 799;
 
     public FrameAOT() {
+        try {
+            CacheDataLoader.getInstance().LoadData();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
         panelAOT = new PanelAOT();
         add(panelAOT);
         creatAndShow();
         addKeyListener(panelAOT);
         addMouseListener(panelAOT);
-        try {
-            CacheDataLoader.getInstance().LoadData();
-        } catch (IOException ex) {
-
-        }
+        addMouseMotionListener(panelAOT);
     }
 
     public void creatAndShow() {

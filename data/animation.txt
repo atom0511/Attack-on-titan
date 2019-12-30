@@ -1,0 +1,14 @@
+
+4
+
+track
+track1 500000000 track2 500000000
+
+movePlane
+planeMove1 1000000 planeMove2 1000000
+
+moveAndShootPlane
+planeShoot1 1000000 planeShoot2 1000000 planeShoot3 1000000 planeShoot4 1000000 planeShoot5 1000000
+
+beHurtHull
+hull1 1000000 hull2 1000000 hull3 1000000 hull4 1000000

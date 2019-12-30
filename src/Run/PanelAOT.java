@@ -1,41 +1,69 @@
 package Run;
 
-
+import Effect.CacheDataLoader;
+import Effect.FrameImage;
 import Object.GameWorld;
-import Object.PhysicalMap;
-import java.awt.Color;
+import java.awt.Container;
 import java.awt.Graphics;
+import java.awt.Label;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import javax.swing.JLabel;
+;
+import javax.swing.JPanel;
 import javax.swing.JPanel;
 
-public class PanelAOT extends JPanel implements Runnable, KeyListener, MouseListener, MouseMotionListener {
+
+
+public class PanelAOT extends JPanel implements Runnable, KeyListener, MouseListener, MouseMotionListener, ActionListener {
 
     public static boolean isRunning;
     public static Thread thread;
     public static float num;
     GameWorld gameWorld;
     InputManager inputManager;
-    private float count = 2;
+    private FrameImage frameBG, tree, bush1, signArrow, stone, skeleton, grass1, grass2, cactus1, cactus2, cactus3, crate, name;
 
     public PanelAOT() {
         gameWorld = new GameWorld();
         inputManager = new InputManager(gameWorld);
-       
+
+        frameBG = CacheDataLoader.getInstance().getFrameImage("backGround");
+        tree = CacheDataLoader.getInstance().getFrameImage("tree");
+        bush1 = CacheDataLoader.getInstance().getFrameImage("bush1");
+        signArrow = CacheDataLoader.getInstance().getFrameImage("signArrow");
+        stone = CacheDataLoader.getInstance().getFrameImage("stone");
+        skeleton = CacheDataLoader.getInstance().getFrameImage("skeleton");
+        grass1 = CacheDataLoader.getInstance().getFrameImage("grass1");
+        grass2 = CacheDataLoader.getInstance().getFrameImage("grass2");
+        cactus1 = CacheDataLoader.getInstance().getFrameImage("cactus1");
+        cactus2 = CacheDataLoader.getInstance().getFrameImage("cactus2");
+        cactus3 = CacheDataLoader.getInstance().getFrameImage("cactus3");
+        crate = CacheDataLoader.getInstance().getFrameImage("crate");
+        name = CacheDataLoader.getInstance().getFrameImage("name");
     }
 
-    @Override
     public void paint(Graphics g) {
-        g.setColor(Color.WHITE);
-        g.fillRect(0, 0, 1200, 800);
+        g.drawImage(frameBG.getImage(), 0, 0, null);
+        tree.draw(g, 880, 520);
+        bush1.draw(g, 840, 605);
+        signArrow.draw(g, 370, 605);
+        stone.draw(g, 500, 615);
+        skeleton.draw(g, 430, 630);
+        grass2.draw(g, 1170, 525);
+        cactus1.draw(g, 1450, 610);
+        cactus2.draw(g, 200, 530);
+        cactus3.draw(g, 1600, 450);
+        crate.draw(g, 1000, 300);
+        grass1.draw(g, 50, 330);
+        grass1.draw(g, 80, 330);
+        name.draw(g, 355, 593);
         gameWorld.draw(g);
-        
-        g.setColor(Color.RED);
-        g.drawLine((int) gameWorld.camera.getPosX(), (int) gameWorld.soldier.getPosY(),
-                (int) gameWorld.soldier.getPosX(), (int) gameWorld.soldier.getPosY());
     }
 
     @Override
@@ -80,7 +108,23 @@ public class PanelAOT extends JPanel implements Runnable, KeyListener, MouseList
 
     public void Update() {
         gameWorld.Update();
-       
+        int time = 10000000;
+        if (System.nanoTime() % 10000 == 0 ) {
+            time = 1000000;
+        }
+        if (System.nanoTime() - gameWorld.plane.startTimeToShoot > 100 * time) {
+            if (gameWorld.plane.getPosX() > gameWorld.soldier.getPosX() && gameWorld.plane.getDirection() == 1) {
+                gameWorld.plane.attack(gameWorld.soldier.getPosX() + 35, gameWorld.soldier.getPosY() + 35);
+            } else if (gameWorld.plane.getPosX() <= gameWorld.soldier.getPosX() && gameWorld.plane.getDirection() == 1) {
+                gameWorld.plane.attack(gameWorld.soldier.getPosX() + 70, gameWorld.soldier.getPosY() + 35);
+            } else if (gameWorld.plane.getPosX() <= gameWorld.soldier.getPosX() && gameWorld.plane.getDirection() == 0) {
+                gameWorld.plane.attack(gameWorld.soldier.getPosX() - 35, gameWorld.soldier.getPosY() + 35);
+            } else if (gameWorld.plane.getPosX() > gameWorld.soldier.getPosX() && gameWorld.plane.getDirection() == 0) {
+                gameWorld.plane.attack(gameWorld.soldier.getPosX() - 70, gameWorld.soldier.getPosY() + 35);
+            }
+            gameWorld.plane.startTimeToShoot = System.nanoTime();
+        }
+
     }
 
     public void startGame() {
@@ -108,17 +152,6 @@ public class PanelAOT extends JPanel implements Runnable, KeyListener, MouseList
 
     @Override
     public void mouseClicked(MouseEvent me) {
-
-//        inputManager.mouseClicked();
-//          ArrayList 
-//        bullet.setPosX((int) gameWorld.soldier.getPosX() + (int) gameWorld.soldier.getWidth() / 2 - (int) bullet.getRadius());
-//        bullet.setPosY((int) gameWorld.soldier.getPosY());
-//        a = (gameWorld.soldier.getPosY() - me.getY()) / (gameWorld.soldier.getPosX() + gameWorld.soldier.getWidth() / 2 - me.getX() - 15);
-//        b = me.getY() - me.getX() * a;
-//        bullet.setSpeedX(2);
-//        bullet.setSpeedY(-2);
-        inputManager.mousePressed();
-
     }
 
     @Override
@@ -128,7 +161,7 @@ public class PanelAOT extends JPanel implements Runnable, KeyListener, MouseList
 
     @Override
     public void mouseReleased(MouseEvent me) {
-
+        inputManager.mouseRealeased(me.getX(), me.getY());
     }
 
     @Override
@@ -148,7 +181,14 @@ public class PanelAOT extends JPanel implements Runnable, KeyListener, MouseList
 
     @Override
     public void mouseMoved(MouseEvent me) {
+        int x = (int) gameWorld.soldier.getPosX() - 7;
+        int y = (int) gameWorld.soldier.getPosY() - 25;
+        gameWorld.soldier.angle = gameWorld.soldier.getAngle(me.getX(), me.getY(), x, y);
+    }
 
+    @Override
+    public void actionPerformed(ActionEvent ae) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

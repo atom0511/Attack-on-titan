@@ -6,7 +6,6 @@ import java.awt.event.KeyEvent;
 public class InputManager {
 
     GameWorld gameWorld;
-    public boolean mouse;
     public boolean left = false;
     public boolean up = false;
     public boolean right = false;
@@ -23,19 +22,44 @@ public class InputManager {
         switch (keyCode) {
             case KeyEvent.VK_UP:
                 up = true;
+                if (gameWorld.soldier.getIsJumping() == true) {
+                    gameWorld.soldier.setSpeedY(-4);
+                }
                 break;
             case KeyEvent.VK_DOWN:
 
                 break;
             case KeyEvent.VK_LEFT:
                 left = true;
-                gameWorld.soldier.setSpeedX(-3);
+                gameWorld.soldier.setDirection(gameWorld.soldier.LEFT_DIR);
+                gameWorld.soldier.run();
                 break;
             case KeyEvent.VK_RIGHT:
                 right = true;
-                gameWorld.soldier.setSpeedX(3);
+                gameWorld.soldier.setDirection(gameWorld.soldier.RIGHT_DIR);
+                gameWorld.soldier.run();
                 break;
-            case KeyEvent.VK_SPACE:
+            case KeyEvent.VK_ENTER:
+                   if (gameWorld.state == gameWorld.INIT_GAME) {
+                    if (gameWorld.previousState == gameWorld.GAMEPLAY) {
+                        gameWorld.switchState(gameWorld.GAMEPLAY);
+                    } else {
+                        gameWorld.switchState(gameWorld.TUTORIAL);
+                    }
+
+                    gameWorld.bgMusic.loop();
+                    gameWorld.bgMusic.play();
+                       System.out.println("playms");
+                }
+                if (gameWorld.state == gameWorld.TUTORIAL && gameWorld.storyTutorial >= 1) {
+                    if (gameWorld.storyTutorial <= 3) {
+                        gameWorld.storyTutorial++;
+                        gameWorld.currentSize = 1;
+                        gameWorld.textTutorial = gameWorld.texts1[gameWorld.storyTutorial - 1];
+                    } else {
+                        gameWorld.switchState(gameWorld.GAMEPLAY);
+                    }
+                }
                 break;
         }
     }
@@ -53,11 +77,11 @@ public class InputManager {
                 break;
             case KeyEvent.VK_LEFT:
                 left = false;
-                gameWorld.soldier.setSpeedX(0);
+                gameWorld.soldier.stopRun();
                 break;
             case KeyEvent.VK_RIGHT:
                 right = false;
-                gameWorld.soldier.setSpeedX(0);
+                gameWorld.soldier.stopRun();
                 break;
             case KeyEvent.VK_SPACE://higher jump
                 if (gameWorld.soldier.getIsJumping() == true) {
@@ -67,17 +91,19 @@ public class InputManager {
         }
     }
 
-    public void mousePressed() {
-        mouse = true;
+    public void mousePressed(float mouseX, float mouseY) {
+        gameWorld.soldier.attack(mouseX, mouseY);
 
     }
 
-    public void mouseClicked() {
-        mouse = false;
+    public void mouseClicked(float mouseX, float mouseY) {
+        gameWorld.soldier.attack(mouseX, mouseY);
+
     }
 
-    public void mouseRealeased() {
-        mouse = false;
+    public void mouseRealeased(float mouseX, float mouseY) {
+        gameWorld.soldier.attack(mouseX, mouseY);
+
     }
 
 }

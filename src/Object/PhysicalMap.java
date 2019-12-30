@@ -7,13 +7,11 @@ import java.awt.Rectangle;
 
 public class PhysicalMap extends GameObject {
 
-    
     private final int tileSize;
 
     public PhysicalMap(float posX, float posY, GameWorld gameWorld) {
         super(posX, posY, gameWorld);
         this.tileSize = 50;
-
     }
 
     public int getTileSize() {
@@ -21,13 +19,17 @@ public class PhysicalMap extends GameObject {
     }
 
     public void draw(Graphics g) {
-
         for (int i = 0; i < CacheDataLoader.getInstance().getPhysicalMap().length; i++) {
             for (int j = 0; j < CacheDataLoader.getInstance().getPhysicalMap()[0].length; j++) {
-                g.setColor(Color.GRAY);
+
                 if (CacheDataLoader.getInstance().getPhysicalMap()[i][j] != 0) {
-                    g.fillRect((int) getPosX() + j * tileSize - (int) getGameWorld().camera.getPosX(),
-                            (int) getPosY() + i * tileSize - (int) getGameWorld().camera.getPosY(), tileSize, tileSize);
+                    g.setColor(Color.GRAY);
+                    g.fillRect((int) getPosX() + j * tileSize,
+                            (int) getPosY() + i * tileSize, tileSize, tileSize);
+                    g.setColor(Color.BLUE);
+                    g.drawRect((int) getPosX() + j * tileSize,
+                            (int) getPosY() + i * tileSize, tileSize, tileSize);
+
                 }
             }
         }
@@ -36,6 +38,38 @@ public class PhysicalMap extends GameObject {
     @Override
     public void Update() {
 
+    }
+
+    public Rectangle haveCollisionWithTop(Rectangle rect) {
+
+        int posX1 = rect.x / tileSize;
+        posX1 -= 2;
+        int posX2 = (rect.x + rect.width) / tileSize;
+        posX2 += 2;
+
+        //int posY = (rect.y + rect.height)/tileSize;
+        int posY = rect.y / tileSize;
+
+        if (posX1 < 0) {
+            posX1 = 0;
+        }
+
+        if (posX2 >= CacheDataLoader.getInstance().getPhysicalMap()[0].length) {
+            posX2 = CacheDataLoader.getInstance().getPhysicalMap()[0].length - 1;
+        }
+
+        for (int y = posY; y >= 0; y--) {
+            for (int x = posX1; x <= posX2; x++) {
+
+                if (CacheDataLoader.getInstance().getPhysicalMap()[y][x] == 1) {
+                    Rectangle r = new Rectangle((int) getPosX() + x * tileSize, (int) getPosY() + y * tileSize, tileSize, tileSize);
+                    if (rect.intersects(r)) {
+                        return r;
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     public Rectangle haveCollisionWithLand(Rectangle rec) {
@@ -126,7 +160,7 @@ public class PhysicalMap extends GameObject {
             for (int y = posY1; y <= posY2; y++) {
                 if (CacheDataLoader.getInstance().getPhysicalMap()[y][x] == 1) {
                     Rectangle r = new Rectangle((int) getPosX() + x * tileSize,
-                             (int) getPosY() + y * tileSize, tileSize, tileSize);
+                            (int) getPosY() + y * tileSize, tileSize, tileSize);
                     if (rect.intersects(r)) {
                         return r;
                     }
