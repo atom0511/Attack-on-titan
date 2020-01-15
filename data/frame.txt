@@ -1,5 +1,5 @@
 
-48
+59
 
 hull1
 data/Hulls_Color_B/rsz_hull_01.png
@@ -144,3 +144,36 @@ data/BackGround/Objects/name.png
 
 avatar
 data/avatar.jpg
+
+heart
+data/BackGround/Objects/heart.png
+
+winGame
+data/BackGround/Objects/WinGame.png
+
+explosion1
+data/Effects/Explosion1.png
+
+explosion2
+data/Effects/Explosion2.png
+
+explosion3
+data/Effects/Explosion3.png
+
+explosion4
+data/Effects/Explosion4.png
+
+explosion5
+data/Effects/Explosion5.png
+
+explosion6
+data/Effects/Explosion6.png
+
+explosion7
+data/Effects/Explosion7.png
+
+explosion8
+data/Effects/Explosion8.png
+
+bgMenu
+data/BackGround/MenuBackGround.jpg

@@ -23,7 +23,7 @@ public class Soldier extends Human {
         super(posX, posY, width, height, mass, blood, gameWorld);
         setTeamType(LEAGUE_TEAM);
 
-        setTimeForNoBeHurt(200 * 10000000);
+        setTimeForNoBeHurt(100 * 10000000);
 
         gun = CacheDataLoader.getInstance().getFrameImage("gun");
         hull1 = CacheDataLoader.getInstance().getFrameImage("hull1");
@@ -38,19 +38,22 @@ public class Soldier extends Human {
 
     @Override
     public void draw(Graphics g) {
-        g.setColor(Color.BLUE);
-        g.drawRect((int) (getPosX() - getWidth() / 2), (int) (getPosY() - getHeight() / 2), (int) getHeight(), (int) getWidth());
+
+        //hp
+        g.setColor(Color.GRAY);
+        g.fillRect(19, 59, 102, 22);
+        g.setColor(Color.red);
+        g.fillRect(20, 60, getBlood() * 10, 20);
+
         switch (getState()) {
             case ALIVE:
             case NOBEHURT:
                 if (getState() == NOBEHURT && (System.nanoTime() / 10000000) % 2 != 1) {
-                    System.out.println("Plash...");
+
                 } else {
                     runTrack1.draw(g, (int) getPosX() - 16, (int) getPosY());
                     runTrack2.draw(g, (int) getPosX() + 16, (int) getPosY());
                     hull1.draw(g, (int) getPosX(), (int) getPosY());
-                    g.setColor(Color.RED);
-                    g.drawOval((int) (getPosX() - 35), (int) (getPosY() + 7 - 35), 70, 70);
                     Graphics2D g2 = (Graphics2D) g;
                     gun.rotateImage(g2, gun.getImage(), (int) getPosX() - 7,
                             (int) getPosY() - 25, Math.toRadians(angle), 7, 15);
@@ -66,7 +69,6 @@ public class Soldier extends Human {
                 Graphics2D g3 = (Graphics2D) g;
                 gun.rotateImage(g3, gun.getImage(), (int) getPosX() - 7,
                         (int) getPosY() - 25, Math.toRadians(angle), 7, 15);
-
                 break;
             case FEY:
 
@@ -81,6 +83,26 @@ public class Soldier extends Human {
         super.Update();
         runTrack1.Update(System.nanoTime());
         behurtForwardAnim.Update(System.nanoTime());
+        switch (state) {
+            case ALIVE:
+                break;
+            case BEHURT:
+                state = NOBEHURT;
+                startTimeNoBeHurt = System.nanoTime();
+                if (getBlood() == 0) {
+                    state = DEATH;
+                }
+                break;
+            case NOBEHURT:
+                if (System.nanoTime() - startTimeNoBeHurt > timeForNoBeHurt) {
+                    state = ALIVE;
+                }
+                break;
+            case FEY:
+                break;
+            case DEATH:
+                break;
+        }
     }
 
     public double getPositionX(double angle) {
@@ -177,4 +199,5 @@ public class Soldier extends Human {
 //        System.out.println("Call back hurting");
 //        hurtingSound.play();
     }
+    
 }

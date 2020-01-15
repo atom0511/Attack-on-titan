@@ -1,6 +1,5 @@
 package Object;
 
-
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
@@ -13,21 +12,50 @@ public abstract class Bullet extends ParticularObject {
         super(posX, posY, width, height, mass, 1, gameWorld);
         setDamage(damage);
     }
-    
+
     @Override
     public void Update() {
         super.Update();
-        setPosX(getPosX() + getSpeedX());
-        setPosY(getPosY() + getSpeedY());
-        
-        ParticularObject object = getGameWorld().particularObjectManager.getCollisionWithEnemyObject(this);
-        if (object != null && object.getState() == ALIVE) {
-            setBlood(0);
-            object.beHurt(getDamage()); 
-            System.out.println("Bullet set behurt for enemy");
+        if(getPosX() >= 1750 || getPosX() <= 10 || getPosY() <= 10 || getPosY() >= 789){
+            setState(DEATH);
+        }
+        Rectangle check = getBoundForCollisionWithMap();
+        check.y += getSpeedY();
+        Rectangle check2 = getGameWorld().physicalMap.haveCollisionWithLand(check);
+
+        if (check2 != null) {
+            setState(DEATH);
+        } else {
+            setPosX(getPosX() + getSpeedX());
+            setPosY(getPosY() + getSpeedY());
+        }
+
+        Rectangle check3 = getBoundForCollisionWithMap();
+        check3.x += getSpeedX();
+        Rectangle check4 = getGameWorld().physicalMap.haveCollisionWithLeftWall(check3);
+
+        if (check4 != null) {
+            setState(DEATH);
+        }
+
+        Rectangle check5 = getBoundForCollisionWithMap();
+        check5.x += getSpeedX();
+        Rectangle check6 = getGameWorld().physicalMap.haveCollisionWithRightWall(check5);
+
+        if (check6 != null) {
+            setState(DEATH);
+        }
+        // chung setPosX(getPosX() + getSpeedX()); với haveCollisionWithLeftWall
+        Rectangle check7 = getBoundForCollisionWithMap();
+        check7.y += getSpeedY();
+        Rectangle check8 = getGameWorld().physicalMap.haveCollisionWithTop(check7);
+
+        if (check8 != null) {
+            setState(DEATH);
         }
     }
 
+    @Override
     public abstract void draw(Graphics g);
 
     @Override

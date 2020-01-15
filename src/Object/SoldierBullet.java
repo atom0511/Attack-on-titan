@@ -1,4 +1,3 @@
-
 package Object;
 
 import java.awt.Color;
@@ -13,7 +12,17 @@ public class SoldierBullet extends Bullet {
     @Override
     public void draw(Graphics g) {
         g.setColor(Color.RED);
-        g.fillOval((int) getPosX() , (int) getPosY(), (int) getHeight(), (int) getWidth());
+        g.fillOval((int) getPosX(), (int) getPosY(), (int) getHeight(), (int) getWidth());
     }
-    
+
+    @Override
+    public void Update() {
+        super.Update();
+        ParticularObject object = getGameWorld().particularObjectManager.getCollisionWithEnemyObject(this);
+        if (object != null && object.getState() == ALIVE) {
+            setState(DEATH);
+            object.beHurt(getDamage());
+//            System.out.println("Bullet set behurt for enemy");
+        }
+    }
 }

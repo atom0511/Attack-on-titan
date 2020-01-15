@@ -19,7 +19,7 @@ public abstract class ParticularObject extends GameObject {
     public static final int DEATH = 3;
     public static final int NOBEHURT = 4; // vừa hồi sinh
 
-    private int state = ALIVE;
+    public int state = ALIVE;
 
     private float width;
     private float height;
@@ -31,8 +31,8 @@ public abstract class ParticularObject extends GameObject {
     private int direction;
     private int teamType;
 
-    private long startTimeNoBeHurt;
-    private long timeForNoBeHurt;
+    public long startTimeNoBeHurt;
+    public long timeForNoBeHurt;
 
     protected Animation behurtForwardAnim, behurtBackAnim;
 
@@ -160,45 +160,14 @@ public abstract class ParticularObject extends GameObject {
         this.behurtBackAnim = behurtBackAnim;
     }
 
-    @Override
-    public void Update() {
-        switch (state) {
-            case ALIVE:
-                break;
-            case BEHURT:
-                System.out.println("state now = " + getState());
-
-                System.out.println("come to BEHURT");
-
-                System.out.println("BEHURT");
-                state = NOBEHURT;
-                startTimeNoBeHurt = System.nanoTime();
-                if (getBlood() == 0) {
-                    state = DEATH;
-                }
-                break;
-            case FEY:
-                break;
-            case DEATH:
-                System.out.println("Come to Death");
-                break;
-            case NOBEHURT:
-                System.out.println("Come to NOBE HURT");
-                if (System.nanoTime() - startTimeNoBeHurt > timeForNoBeHurt) {
-                    state = ALIVE;
-                    System.out.println("Back to Alive");
-                }
-                break;
-        }
-    }
-
     public void beHurt(int damageEat) {
         setBlood(getBlood() - damageEat);
-        System.out.println("before behurt = " + getState());
         state = BEHURT;
-        System.out.println("after behurt = " + getState());
-        System.out.println("soldier Blood = " + getBlood());
         hurtingCallback();
+    }
+
+    @Override
+    public void Update() {
     }
 
     public Rectangle getBoundForCollisionWithMap() {

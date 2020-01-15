@@ -1,5 +1,5 @@
 
-4
+5
 
 track
 track1 500000000 track2 500000000
@@ -12,3 +12,6 @@ planeShoot1 1000000 planeShoot2 1000000 planeShoot3 1000000 planeShoot4 1000000 
 
 beHurtHull
 hull1 1000000 hull2 1000000 hull3 1000000 hull4 1000000
+
+explosion
+explosion4 1000000 explosion5 1000000 explosion6 1000000 explosion7 1000000 explosion8 1000000

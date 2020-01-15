@@ -68,11 +68,13 @@ public class ParticularObjectManager {
             }
         }
     }
-    
-    public void draw(Graphics g){
-        synchronized(particularObjects){
-            for(ParticularObject object: particularObjects){
-                if(!object.isObjectOutOfCameraView()) object.draw(g);
+
+    public void draw(Graphics g) {
+        synchronized (particularObjects) {
+            for (ParticularObject object : particularObjects) {
+                if (!object.isObjectOutOfCameraView()) {
+                    object.draw(g);
+                }
             }
         }
     }

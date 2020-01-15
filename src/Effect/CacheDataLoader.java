@@ -128,6 +128,7 @@ public class CacheDataLoader {
                 while ((line = br.readLine()).equals(""));
                 String path = line;
                 BufferedImage image = ImageIO.read(new File(path));
+//                System.out.println(path);
                 frame.setImage(image);
 
                 instance.frameImages.put(frame.getName(), frame);

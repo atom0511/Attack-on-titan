@@ -25,6 +25,7 @@ public class PanelAOT extends JPanel implements Runnable, KeyListener, MouseList
     public static boolean isRunning;
     public static Thread thread;
     public static float num;
+
     GameWorld gameWorld;
     InputManager inputManager;
     private FrameImage frameBG, tree, bush1, signArrow, stone, skeleton, grass1, grass2, cactus1, cactus2, cactus3, crate, name;

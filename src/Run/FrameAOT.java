@@ -7,8 +7,8 @@ import javax.swing.JFrame;
 public class FrameAOT extends JFrame {
 
     public static PanelAOT panelAOT;
-    public static final int SCREEN_WIDTH = 1770;
-    public static final int SCREEN_HEIGHT = 799;
+    public static final int SCREEN_WIDTH = 1750;
+    public static final int SCREEN_HEIGHT = 780;
 
     public FrameAOT() {
         try {
@@ -16,6 +16,7 @@ public class FrameAOT extends JFrame {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+        
         panelAOT = new PanelAOT();
         add(panelAOT);
         creatAndShow();
@@ -30,6 +31,7 @@ public class FrameAOT extends JFrame {
         setDefaultCloseOperation(3);
         setLocationRelativeTo(this);
         setVisible(true);
+        setResizable(false);
     }
 
     public void startGame() {

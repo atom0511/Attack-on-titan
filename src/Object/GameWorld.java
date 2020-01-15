@@ -33,7 +33,7 @@ public class GameWorld {
     public int tutorialState = INTROGAME;
 
     public int storyTutorial = 0;
-    public String[] texts1 = new String[4];
+    public String[] texts1 = new String[5];
 
     public String textTutorial;
     public int currentSize = 1;
@@ -42,9 +42,10 @@ public class GameWorld {
     ParticularObject boss;
 
     FrameImage avatar = CacheDataLoader.getInstance().getFrameImage("avatar");
-
-    private int numberOfLife = 3;
+    public int numberOfLife = 3;
     public AudioClip bgMusic;
+
+    int a = 0;
 
     public GameWorld() {
 
@@ -52,17 +53,22 @@ public class GameWorld {
         texts1[1] = "  There was a Big Plane from University on Earth in 10 years\n"
                 + "  and we lived in the scare in that 10 years....";
         texts1[2] = "  Now is the time for us, kill it and get freedom!....";
-        texts1[3] = "      LET'S GO!.....";
+        texts1[3] = "  You need to use:\n"
+                + "     '→↑↓←' or 'WASD' to move\n"
+                + "     'SPACE' to high jump\n"
+                + "     'LEFT MOUSE' to shoot.\n";
+        texts1[4] = "      LET'S GO!....";
 
         textTutorial = texts1[0];
         camera = new Camera(0, 0, FrameAOT.SCREEN_WIDTH, FrameAOT.SCREEN_HEIGHT, this);
         soldier = new Soldier(400, 600, 50, 50, 0.1f, 10, this);
         soldier.setTeamType(ParticularObject.LEAGUE_TEAM);
-        plane = new Plane(1100, 165, 150, 50, 4, 4, 0, 10, this);
+        plane = new Plane(1100, 165, 150, 50, 4, 4, 100, this);
         plane.setTeamType(ParticularObject.ENEMY_TEAM);
         physicalMap = new PhysicalMap(0, 0, this);
         backgroundMap = new BackgroundMap(0, 0, this);
         bulletManager = new BulletManager(this);
+
         particularObjectManager = new ParticularObjectManager(this);
         particularObjectManager.addObject(plane);
         particularObjectManager.addObject(soldier);
@@ -83,7 +89,6 @@ public class GameWorld {
             }
 
         } else {
-
             if (currentSize < textTutorial.length()) {
                 currentSize++;
             }
@@ -92,7 +97,7 @@ public class GameWorld {
 
     private void drawString(Graphics g, String text, int x, int y) {
         for (String str : text.split("\n")) {
-            g.setFont(new Font ("TimesRoman", Font.PLAIN, 20));
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
             g.drawString(str, x, y += g.getFontMetrics().getHeight());
         }
     }
@@ -118,69 +123,66 @@ public class GameWorld {
     }
 
     public void draw(Graphics g) {
-//        physicalMap.draw(g);
-
         if (g != null) {
-
-            // NOTE: two lines below make the error splash white screen....
-            // need to remove this line
-            //g2.setColor(Color.WHITE);
-            //g2.fillRect(0, 0, GameFrame.SCREEN_WIDTH, GameFrame.SCREEN_HEIGHT);
-            //physicalMap.draw(g2);
             switch (state) {
                 case INIT_GAME:
                     g.setColor(Color.BLACK);
                     g.fillRect(0, 0, FrameAOT.SCREEN_WIDTH, FrameAOT.SCREEN_HEIGHT);
                     g.setColor(Color.WHITE);
-                    g.setFont(new Font ("TimesRoman", Font.PLAIN, 30));
-                    g.drawString("PRESS ENTER TO CONTINUE", 650, 400);
+                    g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
+                    g.drawString("PRESS ENTER TO START GAME", 650, 350);
+                    g.drawImage(CacheDataLoader.getInstance().getFrameImage("bgMenu").getImage(), 730, 100, null);
                     break;
                 case PAUSEGAME:
                     g.setColor(Color.BLACK);
-                    g.fillRect(300, 260, 500, 70);
+                    g.fillRect(0, 0, FrameAOT.SCREEN_WIDTH, FrameAOT.SCREEN_HEIGHT);
                     g.setColor(Color.WHITE);
-                    g.drawString("PRESS ENTER TO CONTINUE", 400, 300);
+                    g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
+                    g.drawString("PAUSE GAME", 700, 250);
+                    g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+                    g.drawString("PRESS ENTER TO COUNTINUE", 720, 300);
                     break;
                 case TUTORIAL:
+                    //physicalMap.draw(g);
                     backgroundMap.draw(g);
                     TutorialDraw(g);
-
                     break;
                 case GAMEWIN:
                 case GAMEPLAY:
+                    boolean flag = true;
+                    if (state == GAMEWIN) {
+                        flag = false;
+                        g.drawImage(CacheDataLoader.getInstance().getFrameImage("winGame").getImage(), 600, 0, null);
+                        g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
+                        g.setColor(Color.ORANGE);
+                        g.drawString("PRESS ENTER TO PLAY AGAIN", 680, 200);
+                    }
+                    for (int i = 0; i < numberOfLife; i++) {
+                        g.drawImage(CacheDataLoader.getInstance().getFrameImage("heart").getImage(), 20 + i * 40, 18, null);
+                    }
+                    if (soldier.getPosY() < 400 && soldier.getIsJumping() == true && flag == true) {
+                        System.out.println("");
+                        g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
+                        g.setColor(Color.ORANGE);
+                        g.drawString("You can not jump high here", 680, 200);
+                    }
                     backgroundMap.draw(g);
                     bulletManager.draw(g);
                     particularObjectManager.draw(g);
-
-                    g.setColor(Color.GRAY);
-                    g.fillRect(19, 59, 102, 22);
-                    g.setColor(Color.red);
-                    g.fillRect(20, 60, soldier.getBlood(), 20);
-
-                    for (int i = 0; i < numberOfLife; i++) {
-                        g.drawImage(CacheDataLoader.getInstance().getFrameImage("stoneBlock").getImage(), 20 + i * 40, 18, null);
-                    }
-
-                    if (state == GAMEWIN) {
-                        g.drawImage(CacheDataLoader.getInstance().getFrameImage("stoneBlock").getImage(), 300, 300, null);
-                    }
 
                     break;
                 case GAMEOVER:
                     g.setColor(Color.BLACK);
                     g.fillRect(0, 0, FrameAOT.SCREEN_WIDTH, FrameAOT.SCREEN_HEIGHT);
                     g.setColor(Color.WHITE);
-                    g.drawString("GAME OVER!", 450, 300);
+                    g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
+                    g.drawString("GAME OVER!", 700, 350);
                     break;
-
             }
-
         }
-
     }
 
     public void Update() {
-
         switch (state) {
             case INIT_GAME:
                 break;
@@ -195,7 +197,7 @@ public class GameWorld {
                 if (soldier.getState() == ParticularObject.DEATH) {
                     numberOfLife--;
                     if (numberOfLife >= 0) {
-                        soldier.setBlood(100);
+                        soldier.setBlood(10);
                         soldier.setPosY(soldier.getPosY() - 50);
                         soldier.setState(ParticularObject.NOBEHURT);
                         particularObjectManager.addObject(soldier);
@@ -203,7 +205,14 @@ public class GameWorld {
                         switchState(GAMEOVER);
                         bgMusic.stop();
                     }
+                } else if (plane.getBlood() == 0) {
+                    plane.setState(ParticularObject.DEATH);
+                    switchState(GAMEWIN);
+                    bgMusic.stop();
                 }
+            case PAUSEGAME:
+             
+                break;
             case GAMEOVER:
 
                 break;
